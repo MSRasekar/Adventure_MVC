@@ -1,13 +1,6 @@
-﻿
-
-     
-
-// Controllers/HomeController.cs
-using Adventure_MVC.Models;
+﻿using Adventure_MVC.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using System.Diagnostics;
-using System.Linq;
 
 public class HomeController : Controller
 {
@@ -19,24 +12,38 @@ public class HomeController : Controller
         _logger = logger;
         _dbContext = dbContext;
     }
+    public IActionResult Index()
+    {
+        return View();
+    }
+    [HttpGet]
+    public IActionResult Register()
+    {
+        var viewModel = new RegistrationDTO();
 
-    // Other actions...
+        return View(viewModel);
+    }
 
     [HttpPost]
-    public IActionResult Register([FromBody] User newUser)
+    public IActionResult Register(RegistrationDTO registrationDto)
     {
         if (ModelState.IsValid)
         {
             // Check if the username or email is already registered
-            if (_dbContext.Users.Any(u => u.Username == newUser.Username || u.Email == newUser.Email))
+            if (_dbContext.Users.Any(u => u.Username == registrationDto.Username || u.Email == registrationDto.Email))
             {
                 ModelState.AddModelError("RegistrationError", "Username or email already exists.");
-                return View("Registration");
+                return View("Register");
             }
 
-            // Hash the password before storing it (you should use a secure password hashing library)
-            // For simplicity, I'm using a plain text password here.
-            newUser.Password = newUser.Password;
+            // Create a new User from the RegistrationDTO
+            var newUser = new User
+            {
+                Username = registrationDto.Username,
+                Email = registrationDto.Email,
+                Mobile = registrationDto.Mobile,
+                Password = registrationDto.Password // For security, use a secure password hashing method here
+            };
 
             _dbContext.Users.Add(newUser);
             _dbContext.SaveChanges();
@@ -45,14 +52,23 @@ public class HomeController : Controller
             return RedirectToAction("Login");
         }
 
-        return View("Registration", newUser);
+        return View("Register");
+    }
+
+
+    [HttpGet]
+    public IActionResult Login()
+    {
+        var viewModel = new LoginDTO();
+
+        return View(viewModel);
     }
 
     [HttpPost]
-    public IActionResult Login(string username, string password)
+    public IActionResult Login(LoginDTO loginDto)
     {
         // Check if the user exists in the database
-        var user = _dbContext.Users.FirstOrDefault(u => u.Username == username && u.Password == password);
+        var user = _dbContext.Users.FirstOrDefault(u => u.Username == loginDto.Username && u.Password == loginDto.Password);
 
         if (user != null)
         {
@@ -66,25 +82,11 @@ public class HomeController : Controller
     }
 
 
-
-    public IActionResult Index()
-    {
-        return View();
-    }
-
     public IActionResult Events()
     {
         return View();
     }
 
-    public IActionResult Login()
-    {
-        return View();
-    }
-    public IActionResult Registration()
-    {
-        return View();
-    }
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {
