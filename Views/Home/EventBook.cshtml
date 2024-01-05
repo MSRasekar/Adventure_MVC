@@ -1,0 +1,48 @@
+﻿@model Adventure_MVC.Models.BookEventDTO
+<style>
+    body {
+        background-color: lightslategrey;
+    }
+
+    .Registration-container {
+        text-align: center;
+        max-width: 150px;
+        margin: auto;
+        margin-top: 50px;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-book {
+        background-color: darkgreen;
+        color: #fff;
+    }
+</style>
+
+<div class="container">
+    <div class="EventBook-container mt-4" id="eventbookForm">
+        <h2 class="text-center mb-4">EventBooking</h2>
+        <form asp-controller="Home" asp-action="Eventbook" method="post">
+            
+            <div class="form-group my-1">
+                <input type="text" asp-for="UserID" class="form-control" placeholder=" Enter your userID" required>
+            </div>
+          
+            <div class="form-group my-1">
+                <input type="text" asp-for="EventID" class="form-control" placeholder=" Enter eventID" required>
+            </div>
+           
+           
+            <button type="submit" class="btn btn-lg btn-block btn-book my-3">Book Your Seat</button>
+        </form>
+
+        
+    </div>
+</div>
+<script>
+    document.getElementById('bookingForm').addEventListener('submit', function (event) {
+        alert('Booking successful!');
+    });
+</script>

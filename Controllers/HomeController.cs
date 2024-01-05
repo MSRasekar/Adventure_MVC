@@ -1,5 +1,6 @@
 ﻿using Adventure_MVC.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 
 public class HomeController : Controller
@@ -56,6 +57,7 @@ public class HomeController : Controller
     }
 
 
+
     [HttpGet]
     public IActionResult Login()
     {
@@ -82,10 +84,55 @@ public class HomeController : Controller
     }
 
 
+    //[HttpGet]
+    //public IActionResult Booked_Event()
+    //{
+    //    var eventID = 2;
+    //    var userID = 1;
+    //    var userEventData = _dbContext.UserEvents
+    //        .Where(ue => ue.EventID == eventID && ue.UserID == userID)
+    //        .FirstOrDefault();
+
+    //    // Pass the userEventData to the Booked_Event view
+    //    return View(userEventData);
+
+    //}
+
+    [HttpGet]
+    public IActionResult EventBook()
+    {
+        var viewModel = new BookEventDTO();
+
+        return View(viewModel);
+    }
+
+
+    [HttpPost]
+    public IActionResult EventBook(BookEventDTO bookEventDTO)
+    {
+        // here  Mapping DTO to Model
+        var newUserEvent = new UserEvent
+        {
+            UserID = bookEventDTO.UserID,
+            EventID = bookEventDTO.EventID,
+        };
+
+       
+        _dbContext.UserEvents.Add(newUserEvent);
+        _dbContext.SaveChanges();
+
+        return View("EventBook");
+    }
+
+
+    [HttpGet]
     public IActionResult Events()
     {
         return View();
     }
+
+    
+
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()

@@ -20,6 +20,7 @@
     }
 
     .btn-login {
+        text-align: center;
         background-color: #4caf50;
         color: #fff;
     }
@@ -38,18 +39,30 @@
                 <input asp-for="Username" class="form-control" placeholder="Username" required>
                 <span asp-validation-for="Username" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <input asp-for="Password" class="form-control" placeholder="Password" required>
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
-            <button type="submit" class="btn btn-lg btn-block btn-login">Login</button>
+            <button type="submit" class="btn btn-lg btn-block btn-login" onclick="showAlert()">Login</button>
+          
         </form>
+      
 
         <div class="text-center mt-3">
             <p>Don't have an account? <a asp-controller="Home" asp-action="Register" class="btn-register">Register</a></p>
         </div>
+
+       
     </div>
 </div>
+<script>
+    function showAlert() {
+        // You can customize the alert message
+        alert('Login successful!');
+    }
+</script>
+
 
 @section Scripts {
     @{

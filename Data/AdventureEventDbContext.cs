@@ -13,6 +13,7 @@ public class AdventureEventDbContext : DbContext
     public DbSet<Event> Events { get; set; }
     public DbSet<UserEvent> UserEvents { get; set; }
 
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         // Configure many-to-many relationship between User and Event
